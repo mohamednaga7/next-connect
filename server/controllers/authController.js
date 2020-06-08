@@ -33,7 +33,7 @@ exports.signup = async (req, res) => {
     await User.register(user, password, (err, user) => {
         if (err)
             return res.status(500).send(err.message);
-        res.json(user);
+        res.json(user.name);
     })
 };
 
