@@ -74,11 +74,12 @@ exports.resizeAvatar = async (req, res, next) => {
 
 exports.updateUser = async (req, res) => {
     req.body.updatedAt = new Date().toISOString();
-    await User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
         {_id: req.user._id},
         {$set: req.body},
         {new: true, runValidators: true}
     )
+    return res.json(user);
 };
 
 exports.deleteUser = async (req, res) => {
