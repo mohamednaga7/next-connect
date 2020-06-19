@@ -12,7 +12,7 @@ exports.validateSignup = (req, res, next) => {
     req.checkBody('name', 'Name must be between 4 and 10 characters').isLength({min: 4, max: 10});
 
     //check email is not null, valid and normalized
-    req.checkBody('email', 'Enter a valid email').isEmail().normalizeEmail();
+    req.checkBody('email', 'Enter a valid email').isEmail().normalizeEmail({gmail_remove_dots: false});
 
 
     //check password is not null and min 6 chars
