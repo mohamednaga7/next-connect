@@ -47,7 +47,7 @@ exports.getUserFeed = async (req, res) => {
 const avatarUploadOptions = {
     storage: multer.memoryStorage(),
     limits: {
-        fileSize: 1024 * 1024 
+        fileSize: 1024 * 1024 * 3
     },
     fileFilter: (req, file, next) => {
         if (file.mimetype.startsWith('image/')) {
