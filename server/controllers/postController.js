@@ -42,9 +42,26 @@ exports.addPost = async (req, res) => {
     res.json(post);
 };
 
-exports.deletePost = () => {};
+exports.getPostById = async (req, res, next, id) => {
+    const post = await Post.findOne({_id: id});
+    req.post = post;
 
-exports.getPostById = () => {};
+    const posterId = mongoose.Types.ObjectId(req.post.postedBy._id);
+    if (req.user && posterId.equals(req.user._id)) {
+        req.isPoster = true;
+        return next();
+    }
+    next();
+};
+
+exports.deletePost = async (req, res) => {
+    const {_id } = req.post;
+
+    if (!req.isposter) return res.status(400).json({message: 'you are not authorized to perform this action'});
+
+    const deletedPost = await Post.findOneAndDelete({_id});
+    res.json(deletedPost);
+};
 
 exports.getPostsByUser = async (req, res) => {
     const posts = await Post.find({postedBy: req.profile._id}).sort({
@@ -78,4 +95,24 @@ exports.toggleLike = async (req, res) => {
     res.json(post);
 };
 
-exports.toggleComment = () => {};
+exports.toggleComment = async (req, res) => {
+    const {comment, postId} = req.body;
+    let operator;
+    let data;
+
+    if (req.url.includes('uncomment')) {
+        operator = '$pull';
+        data = {_id: comment._id};
+    } else {
+        operator = '$push';
+        data = {text: comment.text, postedBy: req.user._id};
+    }
+
+    const updatedPost = await Post.findOneAndUpdate(
+        {_id: postId},
+        {[operator]: {comments: data}},
+        {new: true}
+    ).populate('postedBy', '_id name avatar')
+        .populate('comments.postedBy', '_id name avatar');
+    res.json(updatedPost);
+};
