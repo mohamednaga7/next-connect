@@ -63,6 +63,19 @@ exports.getPostFeed = async (req, res) => {
     res.json(posts);
 };
 
-exports.toggleLike = () => {};
+exports.toggleLike = async (req, res) => {
+    const {postId} = req.body;
+
+    const post = await Post.find({_id: postId});
+    const likeIds = post.likes.map(id => id.toString());
+    const authUserId = req.user._id.toString();
+    if (likeIds.includes(authUserId)) {
+        await post.likes.pull(authUserId)
+    } else {
+        await post.likes.push(authUserId);
+    }
+    await post.save();
+    res.json(post);
+};
 
 exports.toggleComment = () => {};
