@@ -1,26 +1,74 @@
-// import Typography from "@material-ui/core/Typography";
-// import Avatar from "@material-ui/core/Avatar";
-// import FormControl from "@material-ui/core/FormControl";
-// import Paper from "@material-ui/core/Paper";
-// import Input from "@material-ui/core/Input";
-// import InputLabel from "@material-ui/core/InputLabel";
-// import Button from "@material-ui/core/Button";
-// import Snackbar from "@material-ui/core/Snackbar";
-// import Dialog from "@material-ui/core/Dialog";
-// import DialogActions from "@material-ui/core/DialogActions";
-// import DialogContent from "@material-ui/core/DialogContent";
-// import DialogContentText from "@material-ui/core/DialogContentText";
-// import DialogTitle from "@material-ui/core/DialogTitle";
-// import Slide from "@material-ui/core/Slide";
-// import Gavel from "@material-ui/icons/Gavel";
-// import VerifiedUserTwoTone from "@material-ui/icons/VerifiedUserTwoTone";
+import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
+import FormControl from "@material-ui/core/FormControl";
+import Paper from "@material-ui/core/Paper";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Slide from "@material-ui/core/Slide";
+import Gavel from "@material-ui/icons/Gavel";
+import VerifiedUserTwoTone from "@material-ui/icons/VerifiedUserTwoTone";
 import withStyles from "@material-ui/core/styles/withStyles";
+import {signUpUser} from "../lib/auth";
 
 class Signup extends React.Component {
-  state = {};
+  state = {
+    name: '',
+    email: '',
+    password: ''
+  };
+
+  handleChange = (event) => {
+    this.setState({[event.target.name]: event.target.value});
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const {name, email, password} = this.state;
+
+    const user = {name, email, password};
+    signUpUser(user);
+  }
 
   render() {
-    return <div>Signup</div>;
+    const {classes} = this.props;
+    return (
+        <div className={classes.root}>
+          <Paper className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <Gavel/>
+            </Avatar>
+            <Typography variant='h5' component='h1'>
+              Sign Up
+            </Typography>
+            <form className={classes.form} onSubmit={this.handleSubmit}>
+              <FormControl margin='normal' required fullWidth>
+                <InputLabel htmlFor='name'>Name</InputLabel>
+                <input type="text" name='name' onChange={this.handleChange}/>
+              </FormControl>
+              <FormControl margin='normal' required fullWidth>
+                <InputLabel htmlFor='email'>Email</InputLabel>
+                <input type="email" name='email' onChange={this.handleChange}/>
+              </FormControl>
+              <FormControl margin='normal' required fullWidth>
+                <InputLabel htmlFor='password'>Password</InputLabel>
+                <input type="password" name='password' onChange={this.handleChange}/>
+              </FormControl>
+              <Button type='submit'
+                      fullWidth
+                      variant='contained'
+                      color='primary'
+                      className={classes.submit}>Sign Up</Button>
+            </form>
+          </Paper>
+        </div>
+    )
   }
 }
 
