@@ -19,7 +19,7 @@ const Navbar = ({classes, router, pageProps: {auth}}) => {
       </Typography>
       {user._id ? (
           <div>
-            <Button><ActiveLink href="/profile">Profile</ActiveLink></Button>
+            <Button><ActiveLink href={`/profile/${user._id}`}>Profile</ActiveLink></Button>
             <Button variant='outlined' onClick={signOutUser}>Sign Out</Button>
           </div>
       ) : (

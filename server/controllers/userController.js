@@ -18,7 +18,7 @@ exports.getAuthUser = (req, res) => {
 };
 
 exports.getUserById = async (req, res, next, id) => {
-    const user = await User.findOne({_id: id}).select('_id name email createdAt updatedAt');
+    const user = await User.findOne({_id: id}).select('_id name avatar email createdAt updatedAt');
     req.profile = user;
 
     const profileId = mongoose.Types.ObjectId(req.profile._id);
